@@ -1,19 +1,19 @@
 # NPC-l2race
-## Goal: Implementing a basic neuromorphic predictive controller for a racing car that adapts to uknown environment racing car track.
+## Goal: Implementing a basic neuromorphic predictive controller for a racing car that adapts to unknown racing car track environments.
 
 
-MLP is type of NN architecture that is foundational in DL. It is simple, classic and powerful when used right
+MLP is a type of NN architecture that is foundational in DL. It is simple, classic, and powerful when used right
 -Data flows forward from input to output (Feedforward).
 -Network learns by adjusting Weights using BackProp and Gradient descent
 -Activation Functions(ReLu, sigmoid or tanh) introduces non-linearity, thus allowing to learn complex patters
 Note:
-- Not ideal for sequantial/spatial data (images (CNN),time series or language(use RNN))
+- Not ideal for sequential/spatial data (images (CNN), time series, or language(use RNN))
 
 MLP is serving as a lightweight policy Net or correction module that will support our Pure Pursuit baseline control.
 
 Logging to track:
 - State, actions, corrections
-- Rewards (e.g. lateraldevation or lap progress)
+- Rewards (e.g., lateral deviation or lap progress)
 - Online learning loss
 
 Model saving
@@ -21,19 +21,19 @@ Model saving
 
 Feature                 Purpose
 log.csv                 Debug what the bot is actually doing
-correction_net.pth      Save model so you can reload next run
+correction_net.pth      Save the model so you can reload it next run
 Logging class           Append every frame or batch safely
 
 
 
-+-------------------------+
-|   Server Track Engine   |  ← (Blackbox Car Dynamics)
-+-----------+-------------+
-            |
-            v
-     Full State (x, y, vx, vy, ax, ay, heading, etc.)
-            |
-            v
++-------------------------+ </br>
+|   Server Track Engine   |  ← (Blackbox Car Dynamics) </br>
++-----------+-------------+ </br>
+            | 
+            v </br>
+     Full State (x, y, vx, vy, ax, ay, heading, etc.) </br>
+            | </br>
+            v </br>
 +-------------------------+
 |     CarController.py    |
 +-------------------------+
