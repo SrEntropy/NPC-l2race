@@ -1,11 +1,14 @@
 import numpy as np
-from correction_net import CorrectionNet
-from car_command import CarCommand
+from utils import RaceLogger
 from collection import deque
+from car_command import CarCommand
+from correction_net import CorrectionNet
+
 
 class CarController:
     def __init__(self, my_car=None):
         self.cat = my_car
+        
         #adjust to your state feature dim
         self.correction_net = CorrectionNet(input_dim=10)
         #tiny replay buffer
@@ -13,6 +16,9 @@ class CarController:
         self.prev_state = None
         self.prev_action = None
         self.lookahead_distance = 5.0
+        #save logings
+        self.logger = RaceLogger()
+
 
     def read(self):
         state = self._get_state_features()
@@ -36,13 +42,21 @@ class CarController:
         steer = np.clip(steer, -1, 1)
         throttle = np.clip(throttle, 0, 1)
 
-        # Buffer & training hooks:
+        # Buffer und training hooks:
         #Save to buffer
         if self.prev_state is not None:
             self.buffer.append((self.prev_state,self.prev_action,state))
         self.prev_state = state
         self.prev_action = (steer_corr,throttle_corr)
-        return CarCommand(steer, throttle, brake)
+  
+        #Final command output
+        command = CarCommand(steer, throttle, brake)
+        #Log this step
+        centerline_error = state[6]  # assuming distance to centerline
+        self.logger.log(self.car, command, (steer_corr, throttle_corr), centerline_error)
+
+        return command
+
 
     def _get_state_features(self):
         """
@@ -178,7 +192,7 @@ class CarController:
         # Do small gradient step every N steps to train correction_net
         """Do one mini-batch update every N steps.
         """
-        
+
         BATCH_SIZE = 16
         if len(self.buffer) < BATCH_SIZE:
             return  # not enough data

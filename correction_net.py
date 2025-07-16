@@ -45,4 +45,11 @@ class CorrectionNet(nn.Module):
 
         return loss.item()
     
+    def save(self, path="correction_net.pth"):
+        torch.save(self.state_dict(), path)
+
+    def load(self, path="correction_net.pth"):
+        self.load_state_dict(torch.load(path, map_location=self.device))
+        self.eval()
+
 
