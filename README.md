@@ -76,9 +76,11 @@ Logging class           Append every frame or batch safely
     Given:
     - P_car = current position
     - Centerline = [p₀, p₁, ..., pₙ]
-    - We find the closest segment, then walk ahead L meters to get the point P_L such that:
-            $$ \sum_{jclosest} \|p_{i+1} - p_i\| \geq L $$
-            And interpolate if overshooting.
+    - We find the closest segment, then walk ahead L meters to get the point P_L such that: </br>
+            $$
+       \sum_{jclosest} \|p_{i+1} - p_i\| \geq L
+      $$
+            </br>And interpolate if overshooting.
 
     
 
